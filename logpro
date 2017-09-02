@@ -1,0 +1,80 @@
+#!/bin/bash
+
+# file: mailscript
+#     \author Giulio Muntoni
+# Si dichiara che il contenuto di questo file e' in ogni sua parte opera
+# originale dell' autore
+
+
+
+#Se il file esiste esegue lo script
+if  [ -e $1 ]  ; then
+
+
+
+#il nome del mittente. Inizializzato a init per la prima riga
+name="init"
+
+#Totale dei caratteri per ogni utente
+wordcount=0
+#Totale dei caratteri per ogni messaggio
+subtot=0
+
+
+
+stop=0
+zero=0
+
+#Ordina il file in ingresso e finche legge una linea se continua a leggere lo stesso nome conta le lettere dei messaggi.Quando il nome #cambia stampa nome e totale dei caratteri e continua il loop per il nome successivo
+
+sort $1 | while   read -r line  ||  [ "$stop" -eq "$zero" ] ; do
+	
+	#il mittente del messaggio della riga
+	name2=${line/:*:*/""}
+
+	if  [  -z "$line" ] ; then
+			stop=1
+	fi
+
+	if  [ "$name" = "$name2" ] || [ "$name" = "init" ]  ; then
+		line=${line/*:*:/""}
+		
+		subtot="${#line}"
+		wordcount=$(($wordcount + $subtot))
+		
+		
+		name=$name2
+		
+	
+		
+	else 
+		
+		echo -n $name
+
+		if  [ "$stop" -eq "$zero" ] ; then
+			echo  " $wordcount"
+		else
+			echo  " $wordcount"
+		fi
+
+		 
+
+		name=$name2
+		wordcount=0
+		line=${line/*:*:/""}
+		subtot="${#line}"
+		wordcount=$(($wordcount + $subtot))
+		
+		
+	fi
+
+
+
+	
+
+	
+done 
+
+
+
+fi
